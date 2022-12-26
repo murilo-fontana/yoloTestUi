@@ -23,17 +23,13 @@ class GameList extends Page {
 
     async showAllGames() {
         await this.gameListDiv.waitForDisplayed()
-        try {
-            if (this.loadMoreButton.isDisplayed()) {
-                await browser.waitUntil(
-                    async () => {
-                        do {
-                            await this.loadMoreButton.click()
-                        } while (await this.loadMoreButton.isDisplayed())
-                    }
-                )
+        await browser.waitUntil(async () => {
+            if (!await this.loadMoreButton.isDisplayed()) {
+                return true;
+            } else {
+                await this.loadMoreButton.click()
             }
-        } catch (error) { }
+        })
     }
     async assertGamesQty(gamesQty) {
         await this.gamesQtyLabel.waitForDisplayed()
